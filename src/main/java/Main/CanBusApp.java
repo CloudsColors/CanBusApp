@@ -20,38 +20,17 @@ public class CanBusApp {
         handle.setBusParams(Canlib.canBITRATE_500K, 0, 0, 0, 0, 0);
     }
 
-    public int getRequested(String request) throws CanlibException{
-        switch(request){
-            case("RPM"):{
-                Message receivedMsg = getFromCan(CAN_CODES.ENGINE_RPM);
-                int dataA = receivedMsg.data[3]; // DataA according to byte[] structure is byte 4
-                int dataB = receivedMsg.data[4]; // DataB according to byte[] structure is byte 5
-                int RPM = (256*dataA+dataB)/4; // Formula to compute RPM from byte data.
-                return RPM;
-            }
-            case("TH-PS"):{
-                Message receivedMsg = getFromCan(CAN_CODES.THROTTLE_POSITION);
-                int dataA = receivedMsg.data[3]; // DataA according to byte[] structure is byte 4
-                int Throttle_position = (100/255)*dataA; // Formula to compute throttle position from byte data.
-                return Throttle_position;
-            }
-            default:{
-                return -1;
-            }
-        }
-    }
-
-    private Message getFromCan(int requestMsg) throws CanlibException{
+    public Message getFromCan(int requestedPID) throws CanlibException{
         // The handle goes on the bus
         handle.busOn();
         //send a request for ENGINE_RPM
-        handle.write(new Message(CAN_CODES.REQUEST_MSG, new byte[]{0x2, CAN_CODES.MODE_SCD, (byte) requestMsg, 0x55, 0x55, 0x55, 0x55}, 8, 0));
+        handle.write(new Message(CAN_CODES.REQUEST_MSG, new byte[]{0x2, CAN_CODES.MODE_SCD, (byte) requestedPID, 0x55, 0x55, 0x55, 0x55}, 8, 0));
         // Wait for a message at most 1s.
         if(handle.hasMessage(1000)){
             // if there's a message, read the message.
             Message msg = handle.read();
             // Check if received data is RPM related.
-            if(msg.data[2] == requestMsg){
+            if(msg.data[2] == requestedPID){
                 handle.busOff();
                 return msg;
             }else{
