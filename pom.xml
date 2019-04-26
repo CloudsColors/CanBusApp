@@ -28,4 +28,8 @@
         </dependency>
     </dependencies>
 
+    <modules>
+        <module> sos-examples </module>
+    </modules>
+
 </project>

@@ -1,59 +1,64 @@
 package eu.arrowhead.client.provider;
 
+import CanWrapper.Message;
+import Main.CAN_CODES;
 import Main.CanBusApp;
-import Main.RequestCan;
+import Main.FormulaCollection;
 import eu.arrowhead.client.common.model.IOMessage;
-import eu.arrowhead.client.common.model.RPMInput;
-import eu.arrowhead.client.common.model.RPMOutput;
-import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 
 @Path("controller")
 public class RPMResource {
 
-  private RequestCan rc;
+  private FormulaCollection formula;
+  private CanBusApp canBus;
 
   public RPMResource(){
     try {
-      rc = new RequestCan("73-30130-00441-2", "10043");
+      formula = new FormulaCollection();
+      canBus = new CanBusApp("73-30130-00441-2", "10043");
     }catch(Exception e){
       System.out.println(e);
     }
   }
 
-  @POST
+  @GET
   @Path("rpm")
-  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getRPM(@Valid IOMessage input, @Context SecurityContext context, @QueryParam("token") String token,
-                         @QueryParam("signature") String signature) {
-    if (context.isSecure()) {
-      RequestVerification.verifyRequester(context, token, signature);
-    }
-    int result = 0;
+  public Response getRPM() {
+    Message msg = null;
+    int data = -1;
     try {
-      result = rc.getRequested(input.getTypeOfMsg());
+      msg = canBus.getFromCan(CAN_CODES.ENGINE_RPM);
     }catch(Exception e){
-      System.out.println(e);
+      System.out.println("Failure");
     }
-    System.out.println("Result: "+result);
-    return Response.status(200).entity(new IOMessage(result, input.getTypeOfMsg(), input.getRequestedTimeStamp(), System.currentTimeMillis())).build();
+    if(msg != null){
+      data = formula.getRpm(msg.data[3], msg.data[4]);
+    }
+    return Response.status(200).entity(new IOMessage(data, "rpm", 0L, System.currentTimeMillis())).build();
   }
 
   @GET
   @Path("enginecooltemp")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getCoolantTemp(){
-    return Response.status(200).entity(new IOMessage(1337, "enginecooltemp", System.currentTimeMillis(), System.currentTimeMillis())).build();
+    Message msg = null;
+    int data = -1;
+    try {
+      msg = canBus.getFromCan(CAN_CODES.ENGINE_COOL_TEMP);
+    }catch(Exception e){
+      System.out.println("Failure");
+    }
+    if(msg != null){
+      data = formula.getEngineCoolantTemp(msg.data[3]);
+    }
+    return Response.status(200).entity(new IOMessage(data, "enginecooltemp", 0L, System.currentTimeMillis())).build();
   }
 
 }
