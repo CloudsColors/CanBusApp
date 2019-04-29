@@ -9,8 +9,11 @@ import eu.arrowhead.client.common.model.IOMessage;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 @Path("controller")
 public class RPMResource {
@@ -30,7 +33,10 @@ public class RPMResource {
   @GET
   @Path("rpm")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getRPM() {
+  public Response getRPM(@Context SecurityContext context, @QueryParam("token") String token, @QueryParam("signature") String signature) {
+    if (context.isSecure()) {
+      RequestVerification.verifyRequester(context, token, signature);
+    }
     Message msg = null;
     int data = -1;
     try {
@@ -47,7 +53,10 @@ public class RPMResource {
   @GET
   @Path("enginecooltemp")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getCoolantTemp(){
+  public Response getCoolantTemp(@Context SecurityContext context, @QueryParam("token") String token, @QueryParam("signature") String signature){
+    if (context.isSecure()) {
+      RequestVerification.verifyRequester(context, token, signature);
+    }
     Message msg = null;
     int data = -1;
     try {

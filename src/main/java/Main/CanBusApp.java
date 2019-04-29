@@ -1,11 +1,9 @@
 package Main;
 
-import Main.WriteToFile;
 import CanWrapper.Canlib;
 import CanWrapper.CanlibException;
 import CanWrapper.Handle;
 import CanWrapper.Message;
-import CanWrapper.NoMessageException;
 
 public class CanBusApp {
 
@@ -13,6 +11,12 @@ public class CanBusApp {
 
     //ean = "73-30130-00861-8", sn = "10540"
 
+    /**
+     * Constructor to create a handle for the can-bus that should be communicated with.
+     * @param ean
+     * @param sn
+     * @throws CanlibException
+     */
     public CanBusApp(String ean, String sn) throws CanlibException{
         // A handle either needs a channel, or a EAN togheter with a Serial.no.
         handle = new Handle(ean, sn); // PCI kvaser card.
@@ -20,6 +24,12 @@ public class CanBusApp {
         handle.setBusParams(Canlib.canBITRATE_500K, 0, 0, 0, 0, 0);
     }
 
+    /**
+     * Function to go on the channel of the can-bus and start receiving/sending specific messages.
+     * @param requestedPID
+     * @return
+     * @throws CanlibException
+     */
     public Message getFromCan(int requestedPID) throws CanlibException{
         // The handle goes on the bus
         handle.busOn();

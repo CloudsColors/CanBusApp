@@ -5,18 +5,18 @@ import org.glassfish.jersey.internal.guava.MoreObjects;
 public class IOMessage {
 
     private Integer data;
-    private String typeOfMsg;
+    private String sensorType;
     private Long requestedTimeStamp;
     private Long responseTimeStamp;
 
     public IOMessage(){
     }
 
-    public IOMessage(Integer data, String typeOfMsg, Long requestedTimeStamp, Long responseTimeStamp){
+    public IOMessage(Integer data, String sensorType, Long requestedTimeStamp, Long responseTimeStamp){
         this.requestedTimeStamp = requestedTimeStamp;
         this.responseTimeStamp = responseTimeStamp;
         this.data = data;
-        this.typeOfMsg = typeOfMsg;
+        this.sensorType = sensorType;
     }
 
     public Long getRequestedTimeStamp() {
@@ -31,8 +31,8 @@ public class IOMessage {
         return data;
     }
 
-    public String getTypeOfMsg() {
-        return typeOfMsg;
+    public String getSensorType() {
+        return sensorType;
     }
 
     public Long getTripTime(){
@@ -45,7 +45,7 @@ public class IOMessage {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("data", data).add("typeOfMsg", typeOfMsg).add("requestedTimeStamp", requestedTimeStamp).add("responseTimeStamp", responseTimeStamp).toString();
+        return MoreObjects.toStringHelper(this).add("data", data).add("sensorType", sensorType).add("requestedTimeStamp", requestedTimeStamp).add("responseTimeStamp", responseTimeStamp).toString();
     }
 
 }
