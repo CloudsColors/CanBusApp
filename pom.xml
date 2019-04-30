@@ -38,8 +38,8 @@
         </dependency>
     </dependencies>
 
-    <modules>
+    <!-- <modules>
         <module> sos-examples </module>
-    </modules>
+    </modules> -->
 
 </project>

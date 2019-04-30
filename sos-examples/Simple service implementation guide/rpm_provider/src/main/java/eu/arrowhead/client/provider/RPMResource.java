@@ -44,8 +44,9 @@ public class RPMResource {
     }catch(Exception e){
       System.out.println("Failure");
     }
-    if(msg != null){
+    if(msg != null) {
       data = formula.getRpm(msg.data[3], msg.data[4]);
+      System.out.println("RPM: " + data);
     }
     return Response.status(200).entity(new IOMessage(data, "rpm", 0L, System.currentTimeMillis())).build();
   }
@@ -66,6 +67,7 @@ public class RPMResource {
     }
     if(msg != null){
       data = formula.getEngineCoolantTemp(msg.data[3]);
+      System.out.println("ECT: "+ data);
     }
     return Response.status(200).entity(new IOMessage(data, "enginecooltemp", 0L, System.currentTimeMillis())).build();
   }

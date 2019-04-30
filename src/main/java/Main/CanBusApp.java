@@ -8,8 +8,7 @@ import CanWrapper.Message;
 public class CanBusApp {
 
     private Handle handle;
-
-    //ean = "73-30130-00861-8", sn = "10540"
+    private boolean hasConnection = false;
 
     /**
      * Constructor to create a handle for the can-bus that should be communicated with.
@@ -30,31 +29,43 @@ public class CanBusApp {
      * @return
      * @throws CanlibException
      */
-    public Message getFromCan(int requestedPID) throws CanlibException{
-        // The handle goes on the bus
+    public Message getFromCan(int requestedPID) throws CanlibException {
+        // Go on the bus.
         handle.busOn();
         //send a request for ENGINE_RPM
         handle.write(new Message(CAN_CODES.REQUEST_MSG, new byte[]{0x2, CAN_CODES.MODE_SCD, (byte) requestedPID, 0x55, 0x55, 0x55, 0x55}, 8, 0));
-        // Wait for a message at most 1s.
-        if(handle.hasMessage(1000)){
-            // if there's a message, read the message.
-            Message msg = handle.read();
-            // Check if received data is RPM related.
-            if(msg.data[2] == requestedPID){
-                handle.busOff();
-                return msg;
+        //Boolean to keep loop going until correct message is received.
+        boolean receivedMsg = false;
+        //Making sure loops breaks after x loops by keeping tally of how many loops is done.
+        int nrOfLoops = 0;
+        Message msg = null;
+        do{
+            nrOfLoops++;
+            if(handle.hasMessage()){
+                msg = handle.read(); // read the message from canbus.
             }else{
-                if(msg.isErrorFrame()) {
-                    //if msg is an error
-                    handle.busOff();
-                    return null;
-                }
+                continue; // continue to next iteration of loop and skip code thats under.
             }
-        }else{
-            //if no message, either vehicle turned off or some sort of error.
-            handle.busOff();
-            return null;
-        }
-        return null;
+            if(msg.data[2] == requestedPID){
+                receivedMsg = true;
+            }else{
+                if(msg.isErrorFrame()){
+                    //Dump msg if error so we can see the data.
+                    System.out.println("Message ID:");
+                    System.out.println(msg.id);
+                    System.out.println("Message data:");
+                    System.out.println(msg.data[0]+" - "+msg.data[1]+" - "+msg.data[2]+" - "+msg.data[3]+" - "+msg.data[4]+" - "+msg.data[5]+" - "+msg.data[6]+" - "+msg.data[7]);
+                    System.out.println("Message flag:");
+                    System.out.println(msg.flags);
+                    System.out.println("Message length:");
+                    System.out.println(msg.length);
+                }
+                msg = null;
+                continue;
+            }
+        }while(receivedMsg || nrOfLoops < 10); // break loop when right message received or when max X nr of loops have iterated.
+        // go off the bus
+        handle.busOff();
+        return msg;
     }
 }
