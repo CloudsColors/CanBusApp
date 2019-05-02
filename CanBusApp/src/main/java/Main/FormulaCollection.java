@@ -1,8 +1,5 @@
 package Main;
 
-import CanWrapper.CanlibException;
-import CanWrapper.Message;
-
 public class FormulaCollection {
 
     public FormulaCollection(){
