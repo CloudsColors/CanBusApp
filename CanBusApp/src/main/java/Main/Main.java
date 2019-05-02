@@ -1,7 +1,6 @@
 package Main;
 
 import CanWrapper.Message;
-import Main.FormulaCollection;
 
 public class Main {
 
@@ -14,7 +13,7 @@ public class Main {
             FormulaCollection formula = new FormulaCollection();
             canbus = new CanBusApp("00-00000-00000-0", "1");
             while(true){
-                Message msg = canbus.getFromCan(CAN_CODES.ENGINE_RPM);
+                Message msg = canbus.getFromCan(ReadServiceJson.ENGINE_RPM);
                 if(msg==null){
                     System.out.println("Null");
                 }else{

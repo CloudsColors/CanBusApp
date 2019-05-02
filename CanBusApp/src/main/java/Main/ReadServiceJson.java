@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.FileReader;
 
-public class CAN_CODES {
+public class ReadServiceJson {
 
     /*-------------Modes-------------*/
     public static final int MODE_SCD = 0x01; // Show current data
@@ -18,7 +18,7 @@ public class CAN_CODES {
     /**
      * Constructor makes sure that variables are set when creating the class.
      */
-    public CAN_CODES(){
+    public ReadServiceJson(){
         //Make sure the variables is read from JSON and assign when class created.
         readJsonFile();
     }
@@ -32,7 +32,7 @@ public class CAN_CODES {
         JSONObject pid = null;
         try{
             //Parse the JSON file
-            Object obj = parser.parse(new FileReader("/home/andreas/IdeaProjects/CanBusApp/src/main/java/Main/can_codes.json"));
+            Object obj = parser.parse(new FileReader("/home/andreas/IdeaProjects/CanBusApp/src/main/java/Main/ServiceRegistry.json"));
             JSONObject jsonObj = (JSONObject) obj;
             //Everything within the PID section of the JSON is stored in pid variable
             pid = (JSONObject) jsonObj.get("PID");

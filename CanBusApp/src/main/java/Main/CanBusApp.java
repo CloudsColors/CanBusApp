@@ -32,7 +32,7 @@ public class CanBusApp {
      */
     public Message getFromCan(byte requestedPID) throws CanlibException {
         //send a request for ENGINE_RPM
-        handle.write(new Message(CAN_CODES.REQUEST_MSG, new byte[]{0x2, CAN_CODES.MODE_SCD, requestedPID, 0x55, 0x55, 0x55, 0x55}, 8, 0));
+        handle.write(new Message(ReadServiceJson.REQUEST_MSG, new byte[]{0x2, ReadServiceJson.MODE_SCD, requestedPID, 0x55, 0x55, 0x55, 0x55}, 8, 0));
         //Making sure loops breaks after x loops by keeping tally of how many loops is done.
         int nrOfLoops = 0;
         Message msg = null;
@@ -48,7 +48,7 @@ public class CanBusApp {
             // resend the request message
             }else{
                 // resend the request.
-                handle.write(new Message(CAN_CODES.REQUEST_MSG, new byte[]{0x2, CAN_CODES.MODE_SCD, requestedPID, 0x55, 0x55, 0x55, 0x55}, 8, 0));
+                handle.write(new Message(ReadServiceJson.REQUEST_MSG, new byte[]{0x2, ReadServiceJson.MODE_SCD, requestedPID, 0x55, 0x55, 0x55, 0x55}, 8, 0));
                 // continue to next iteration
                 continue;
             }
