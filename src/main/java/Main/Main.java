@@ -12,17 +12,19 @@ public class Main {
     public static void main(String[] args){
         try{
             FormulaCollection formula = new FormulaCollection();
-            canbus = new CanBusApp("00-00000-00000-0", "1");
+            canbus = new CanBusApp("73-30130-00441-2", "10043");
             while(true){
                 Message msg = canbus.getFromCan(CAN_CODES.ENGINE_RPM);
-                if(msg==null){
-                    System.out.println("Null");
-                }else{
+                System.out.println(msg);
+                if(msg!=null){
                     int result = formula.getRpm(msg.data[3], msg.data[4]);
                     System.out.println("RPM: "+result);
+                }else{
+                    System.out.println("null");
                 }
             }
         }catch(Exception e){
+            System.out.println("agsag");
             System.out.println(e);
         }
     }

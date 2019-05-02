@@ -9,6 +9,7 @@ public class CanBusApp {
 
     private Handle handle;
     private boolean hasConnection = false;
+    private boolean sendRequest = false;
 
     /**
      * Constructor to create a handle for the can-bus that should be communicated with.
@@ -21,6 +22,7 @@ public class CanBusApp {
         handle = new Handle(ean, sn); // PCI kvaser card.
         // Sets the parameter for the can bus.
         handle.setBusParams(Canlib.canBITRATE_500K, 0, 0, 0, 0, 0);
+        handle.busOn();
     }
 
     /**
@@ -30,42 +32,27 @@ public class CanBusApp {
      * @throws CanlibException
      */
     public Message getFromCan(int requestedPID) throws CanlibException {
-        // Go on the bus.
-        handle.busOn();
-        //send a request for ENGINE_RPM
-        handle.write(new Message(CAN_CODES.REQUEST_MSG, new byte[]{0x2, CAN_CODES.MODE_SCD, (byte) requestedPID, 0x55, 0x55, 0x55, 0x55}, 8, 0));
-        //Boolean to keep loop going until correct message is received.
-        boolean receivedMsg = false;
+        handle.write(new Message(CAN_CODES.REQUEST_MSG, new byte[]{0x2, CAN_CODES.MODE_SCD, 0x0C, 0x55, 0x55, 0x55, 0x55}, 8, 0));
+        sendRequest = true;
         //Making sure loops breaks after x loops by keeping tally of how many loops is done.
-        int nrOfLoops = 0;
+        int nrOfReads = 0;
         Message msg = null;
+        System.out.println("-----------------------------------------------------");
         do{
-            nrOfLoops++;
+            System.out.println("teasafasda");
             if(handle.hasMessage()){
                 msg = handle.read(); // read the message from canbus.
-            }else{
-                continue; // continue to next iteration of loop and skip code thats under.
-            }
-            if(msg.data[2] == requestedPID){
-                receivedMsg = true;
-            }else{
-                if(msg.isErrorFrame()){
-                    //Dump msg if error so we can see the data.
-                    System.out.println("Message ID:");
-                    System.out.println(msg.id);
-                    System.out.println("Message data:");
-                    System.out.println(msg.data[0]+" - "+msg.data[1]+" - "+msg.data[2]+" - "+msg.data[3]+" - "+msg.data[4]+" - "+msg.data[5]+" - "+msg.data[6]+" - "+msg.data[7]);
-                    System.out.println("Message flag:");
-                    System.out.println(msg.flags);
-                    System.out.println("Message length:");
-                    System.out.println(msg.length);
+                if(msg.data[2] == 0x0C){
+                    //receivedMsg = true;
+                    return msg;
                 }
-                msg = null;
-                continue;
-            }
-        }while(receivedMsg || nrOfLoops < 10); // break loop when right message received or when max X nr of loops have iterated.
-        // go off the bus
-        handle.busOff();
+            }else{
+                handle.write(new Message(CAN_CODES.REQUEST_MSG, new byte[]{0x2, CAN_CODES.MODE_SCD, 0x0C, 0x55, 0x55, 0x55, 0x55}, 8, 0));
+                }
+            nrOfReads++;
+            continue;
+        }while(nrOfReads < 10); // break loop when right message received or when max X nr of loops have iterated.
+        nrOfReads = 0;
         return msg;
     }
 }
