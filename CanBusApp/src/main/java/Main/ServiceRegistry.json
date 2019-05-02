@@ -4,13 +4,13 @@
       "code": "0x0C",
       "description": "Engine rpm",
       "formula": "((256*A)+B)/4",
-      "variable": "integer"
+      "resulting-variable": "integer"
     },
     "enginecooltemp": {
       "code": "0x05",
       "description": "Engine coolant temperature",
       "formula": "(A-40)",
-      "result": "integer"
+      "resulting-variable": "integer"
     }
   }
 }
