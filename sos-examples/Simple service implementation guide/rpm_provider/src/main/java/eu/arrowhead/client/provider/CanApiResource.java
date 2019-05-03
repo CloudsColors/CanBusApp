@@ -1,9 +1,9 @@
 package eu.arrowhead.client.provider;
 
 import CanWrapper.Message;
-import Main.CAN_CODES;
 import Main.CanBusApp;
 import Main.FormulaCollection;
+import Main.ReadServiceJson;
 import eu.arrowhead.client.common.model.IOMessage;
 
 import javax.ws.rs.GET;
@@ -40,7 +40,7 @@ public class CanApiResource {
     Message msg = null;
     int data = -1;
     try {
-      msg = canBus.getFromCan(CAN_CODES.ENGINE_RPM);
+      msg = canBus.getFromCan(ReadServiceJson.ENGINE_RPM);
     }catch(Exception e){
       System.out.println("Failure");
     }
@@ -61,7 +61,7 @@ public class CanApiResource {
     Message msg = null;
     int data = -1;
     try {
-      msg = canBus.getFromCan(CAN_CODES.ENGINE_COOL_TEMP);
+      msg = canBus.getFromCan(ReadServiceJson.ENGINE_COOL_TEMP);
     }catch(Exception e){
       System.out.println("Failure");
     }
