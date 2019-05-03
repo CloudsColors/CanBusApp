@@ -1,0 +1,18 @@
+[
+  {
+    "consumerSystemName": "CanbusDatabaseSystem",
+    "address": "localhost",
+    "port": 8080,
+    "authenticationInfo": "null",
+    "providerSystemNames": "engine-rpm,engine-coolanttemp",
+    "providedServiceName": "rpm,coolanttemp"
+  },
+  {
+    "consumerSystemName": "TestForShow",
+    "address": "localhost",
+    "port": 8080,
+    "authenticationInfo": "null",
+    "providerSystemNames": "enginerpm",
+    "providedServiceName": "rpm"
+  }
+]

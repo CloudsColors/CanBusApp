@@ -16,12 +16,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 @Path("controller")
-public class RPMResource {
+public class CanApiResource {
 
   private FormulaCollection formula;
   private CanBusApp canBus;
 
-  public RPMResource(){
+  public CanApiResource(){
     try {
       formula = new FormulaCollection();
       canBus = new CanBusApp("73-30130-00441-2", "10043");
@@ -31,7 +31,7 @@ public class RPMResource {
   }
 
   @GET
-  @Path("rpm")
+  @Path("enginerpm")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getRPM(@Context SecurityContext context, @QueryParam("token") String token, @QueryParam("signature") String signature) {
     if (context.isSecure()) {
@@ -52,7 +52,7 @@ public class RPMResource {
   }
 
   @GET
-  @Path("enginecooltemp")
+  @Path("enginecoolanttemp")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getCoolantTemp(@Context SecurityContext context, @QueryParam("token") String token, @QueryParam("signature") String signature){
     if (context.isSecure()) {
@@ -71,5 +71,6 @@ public class RPMResource {
     }
     return Response.status(200).entity(new IOMessage(data, "enginecooltemp", 0L, System.currentTimeMillis())).build();
   }
+
 
 }
