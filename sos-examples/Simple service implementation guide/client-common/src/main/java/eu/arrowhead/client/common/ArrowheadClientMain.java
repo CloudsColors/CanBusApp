@@ -83,10 +83,10 @@ public abstract class ArrowheadClientMain {
     if (isSecure) {
       List<String> allMandatoryProperties = new ArrayList<>(clientType.getAlwaysMandatoryFields());
       allMandatoryProperties.addAll(clientType.getSecureMandatoryFields());
-      Utility.checkProperties(props.stringPropertyNames(), allMandatoryProperties);
+      //Utility.checkProperties(props.stringPropertyNames(), allMandatoryProperties);
       startSecureServer(classes, packages);
     } else {
-      Utility.checkProperties(props.stringPropertyNames(), clientType.getAlwaysMandatoryFields());
+      //Utility.checkProperties(props.stringPropertyNames(), clientType.getAlwaysMandatoryFields());
       startServer(classes, packages);
     }
   }

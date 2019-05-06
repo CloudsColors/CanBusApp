@@ -28,6 +28,8 @@ public class CanBusProviderMain extends ArrowheadClientMain {
   private static boolean NEED_AUTH;
   private static boolean NEED_ORCH;
   private static boolean FROM_FILE;
+  private static String AUTH_ENTRY_FILE;
+  private static String SERVICE_ENTRY_FILE;
   private static String SR_BASE_URI;
   private static String AUTH_URI;
 
@@ -63,12 +65,12 @@ public class CanBusProviderMain extends ArrowheadClientMain {
 
     setupBaseUris();
     sr = new ServiceRegistrator(SR_BASE_URI);
-    sr.createServiceEntriesFromFile("config/serviceList.json");
+    sr.createServiceEntriesFromFile(SERVICE_ENTRY_FILE);
     sr.registerAllServices();
 
     if (NEED_AUTH) {
       AuthorisationRegistrator ar = new AuthorisationRegistrator(AUTH_URI);
-      ar.createAuthorisationEntriesFromFile("config/consumerList.json", sr);
+      ar.createAuthorisationEntriesFromFile(AUTH_ENTRY_FILE, sr);
       ar.registerAuthorisationEntries();
     }/*
     if (NEED_ORCH) {
@@ -88,6 +90,10 @@ public class CanBusProviderMain extends ArrowheadClientMain {
     String authAddress = props.getProperty("auth_address", "0.0.0.0");
     int authPort = isSecure ? props.getIntProperty("auth_secure_port", 8445) : props.getIntProperty("auth_insecure_port", 8444);
     AUTH_URI = Utility.getUri(authAddress, authPort, "authorization/mgmt/intracloud", isSecure, false);
+    // Read in service entry file from default.conf
+    SERVICE_ENTRY_FILE = props.getProperty("sr_entry", "config/serviceList.json");
+    // Read in auth entry file from default.conf
+    AUTH_ENTRY_FILE = props.getProperty("auth_entry", "config/consumerList.json");
   }
 
   /* TODO: Fix so it unregisters all services */

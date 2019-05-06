@@ -32,7 +32,7 @@ public class ReadServiceJson {
         JSONObject pid = null;
         try{
             //Parse the JSON file
-            Object obj = parser.parse(new FileReader("/home/andreas/IdeaProjects/CanBusApp/src/main/java/Main/ServiceRegistry.json"));
+            Object obj = parser.parse(new FileReader("/home/andreas/IdeaProjects/CanBusApp/src/main/java/Main/Services.json"));
             JSONObject jsonObj = (JSONObject) obj;
             //Everything within the PID section of the JSON is stored in pid variable
             pid = (JSONObject) jsonObj.get("PID");
