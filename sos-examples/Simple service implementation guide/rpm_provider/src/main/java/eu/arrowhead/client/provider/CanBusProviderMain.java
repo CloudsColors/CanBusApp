@@ -11,34 +11,14 @@ package eu.arrowhead.client.provider;
 
 import eu.arrowhead.client.common.ArrowheadClientMain;
 import eu.arrowhead.client.common.Utility;
-import eu.arrowhead.client.common.exception.ArrowheadException;
-import eu.arrowhead.client.common.exception.ExceptionType;
 import eu.arrowhead.client.common.misc.ClientType;
-import eu.arrowhead.client.common.misc.SecurityUtils;
 import eu.arrowhead.client.common.misc.TypeSafeProperties;
-import eu.arrowhead.client.common.model.ArrowheadService;
-import eu.arrowhead.client.common.model.ArrowheadSystem;
-import eu.arrowhead.client.common.model.IntraCloudAuthEntry;
-import eu.arrowhead.client.common.model.OrchestrationStore;
-import eu.arrowhead.client.common.model.ServiceRegistryEntry;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.KeyStore;
 import java.security.PrivateKey;
-import java.security.Provider;
 import java.security.PublicKey;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.ServiceConfigurationError;
 import java.util.Set;
-import javax.ws.rs.core.UriBuilder;
 
 public class CanBusProviderMain extends ArrowheadClientMain {
 
@@ -49,6 +29,7 @@ public class CanBusProviderMain extends ArrowheadClientMain {
   private static boolean NEED_ORCH;
   private static boolean FROM_FILE;
   private static String SR_BASE_URI;
+  private static String AUTH_URI;
 
   private ServiceRegistrator sr;
 
@@ -80,15 +61,16 @@ public class CanBusProviderMain extends ArrowheadClientMain {
       throw new ServiceConfigurationError("The Store registration feature can only be used in insecure mode!");
     }
 
-    setupSrBaseUri();
+    setupBaseUris();
     sr = new ServiceRegistrator(SR_BASE_URI);
     sr.createServiceEntriesFromFile("config/serviceList.json");
     sr.registerAllServices();
 
-    /* TODO: Fix auth registration.
     if (NEED_AUTH) {
-      registerToAuthorization();
-    }
+      AuthorisationRegistrator ar = new AuthorisationRegistrator(AUTH_URI);
+      ar.createAuthorisationEntriesFromFile("config/consumerList.json", sr);
+      ar.registerAuthorisationEntries();
+    }/*
     if (NEED_ORCH) {
       registerToStore();
     }*/
@@ -96,11 +78,16 @@ public class CanBusProviderMain extends ArrowheadClientMain {
     listenForInput();
   }
 
-  public void setupSrBaseUri(){
+  public void setupBaseUris(){
     TypeSafeProperties props = Utility.getProp();
+    //Service registry address (srAuth)
     String srAddress = props.getProperty("sr_address", "0.0.0.0");
     int srPort = isSecure ? props.getIntProperty("sr_secure_port", 8443) : props.getIntProperty("sr_insecure_port", 8442);
     SR_BASE_URI = Utility.getUri(srAddress, srPort, "serviceregistry", isSecure, false);
+    //Auth registry address (arAuth)
+    String authAddress = props.getProperty("auth_address", "0.0.0.0");
+    int authPort = isSecure ? props.getIntProperty("auth_secure_port", 8445) : props.getIntProperty("auth_insecure_port", 8444);
+    AUTH_URI = Utility.getUri(authAddress, authPort, "authorization/mgmt/intracloud", isSecure, false);
   }
 
   /* TODO: Fix so it unregisters all services */

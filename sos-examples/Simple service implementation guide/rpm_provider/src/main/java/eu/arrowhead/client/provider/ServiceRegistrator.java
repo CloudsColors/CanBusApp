@@ -87,6 +87,26 @@ public class ServiceRegistrator {
     System.out.println("Removing all services was a success!");
   }
 
+  public ArrowheadSystem getSystem(String systemName){
+    for(int i = 0; i < srEntries.size(); i++){
+      if(srEntries.get(i).getProvider().getSystemName().equals(systemName)){
+        return srEntries.get(i).getProvider();
+      }
+    }
+    return null;
+  }
+
+  public ArrowheadService getService(String serviceName){
+    for(int i = 0; i < srEntries.size(); i++){
+      if(srEntries.get(i).getProvidedService().getServiceDefinition().equals(serviceName)){
+        return srEntries.get(i).getProvidedService();
+      }
+    }
+    return null;
+  }
+
+
+
   public ArrayList<ServiceRegistryEntry> getSrEntries(){
     return srEntries;
   }

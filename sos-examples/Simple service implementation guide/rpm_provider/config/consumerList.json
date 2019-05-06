@@ -12,7 +12,7 @@
     "address": "localhost",
     "port": 8080,
     "authenticationInfo": "null",
-    "providerSystemNames": "enginerpm",
+    "providerSystemNames": "engine-rpm",
     "providedServiceName": "rpm"
   }
 ]
