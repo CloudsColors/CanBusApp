@@ -1,8 +1,8 @@
 [
   {
     "systemname": "engine-coolanttemp",
-    "address": "127.0.0.1",
-    "port": 8888,
+    "address": "130.240.5.63",
+    "port": 8080,
     "serviceDefinition": "coolanttemp",
     "interfaces": "JSON-CUSTOM-HTTP-SECURE_AC",
     "serviceMetadata": "unit-celsius",
@@ -10,8 +10,8 @@
   },
   {
     "systemname": "engine-rpm",
-    "address": "127.0.0.1",
-    "port": 8887,
+    "address": "130.240.5.63",
+    "port": 8080,
     "serviceDefinition": "rpm",
     "interfaces": "JSON-CUSTOM-HTTP-SECURE_AC",
     "serviceMetadata": "unit-rpm",

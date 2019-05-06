@@ -80,7 +80,7 @@ public class CanBusProviderMain extends ArrowheadClientMain {
     listenForInput();
   }
 
-  public void setupBaseUris(){
+  private void setupBaseUris(){
     TypeSafeProperties props = Utility.getProp();
     //Service registry address (srAuth)
     String srAddress = props.getProperty("sr_address", "0.0.0.0");

@@ -6,21 +6,21 @@ public class IOMessage {
 
     private Integer data;
     private String sensorType;
-    private Long requestedTimeStamp;
+    private Integer status;
     private Long responseTimeStamp;
 
     public IOMessage(){
     }
 
-    public IOMessage(Integer data, String sensorType, Long requestedTimeStamp, Long responseTimeStamp){
-        this.requestedTimeStamp = requestedTimeStamp;
+    public IOMessage(Integer data, String sensorType, Integer status, Long responseTimeStamp){
+        this.status = status;
         this.responseTimeStamp = responseTimeStamp;
         this.data = data;
         this.sensorType = sensorType;
     }
 
-    public Long getRequestedTimeStamp() {
-        return requestedTimeStamp;
+    public Integer getStatus() {
+        return status;
     }
 
     public Long getRespondsTimeStamp() {
@@ -35,17 +35,9 @@ public class IOMessage {
         return sensorType;
     }
 
-    public Long getTripTime(){
-        if(requestedTimeStamp != null && responseTimeStamp != null){
-            return requestedTimeStamp-responseTimeStamp;
-        }else{
-            return null;
-        }
-    }
-
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("data", data).add("sensorType", sensorType).add("requestedTimeStamp", requestedTimeStamp).add("responseTimeStamp", responseTimeStamp).toString();
+        return MoreObjects.toStringHelper(this).add("data", data).add("sensorType", sensorType).add("status", status).add("responseTimeStamp", responseTimeStamp).toString();
     }
 
 }

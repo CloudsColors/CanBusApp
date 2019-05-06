@@ -47,8 +47,11 @@ public class CanApiResource {
     if(msg != null) {
       data = formula.getRpm(msg.data[3], msg.data[4]);
       System.out.println("RPM: " + data);
+      return Response.status(200).entity(new IOMessage(data, "rpm", 0, System.currentTimeMillis())).build();
+    }else{
+      return Response.status(200).entity(new IOMessage(data, "rpm", -1, System.currentTimeMillis())).build();
     }
-    return Response.status(200).entity(new IOMessage(data, "rpm", 0L, System.currentTimeMillis())).build();
+
   }
 
   @GET
@@ -68,8 +71,11 @@ public class CanApiResource {
     if(msg != null){
       data = formula.getEngineCoolantTemp(msg.data[3]);
       System.out.println("ECT: "+ data);
+      return Response.status(200).entity(new IOMessage(data, "enginecooltemp", 0, System.currentTimeMillis())).build();
+    }else{
+      return Response.status(200).entity(new IOMessage(data, "enginecooltemp", -1, System.currentTimeMillis())).build();
     }
-    return Response.status(200).entity(new IOMessage(data, "enginecooltemp", 0L, System.currentTimeMillis())).build();
+
   }
 
 
