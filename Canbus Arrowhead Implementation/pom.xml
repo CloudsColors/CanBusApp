@@ -19,7 +19,7 @@
 
   <modules>
     <module>client-common</module>
-    <module>rpm_provider</module>
+    <module>canbus_provider</module>
   </modules>
 
   <properties>
