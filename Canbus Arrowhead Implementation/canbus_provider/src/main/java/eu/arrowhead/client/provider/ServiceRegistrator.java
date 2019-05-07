@@ -12,11 +12,19 @@ import eu.arrowhead.client.common.model.ServiceRegistryEntry;
 import javax.ws.rs.core.UriBuilder;
 import java.util.*;
 
+/**
+ * Class to register all or one service/s to the ServiceRegister in Arrowhead.
+ */
 public class ServiceRegistrator {
 
   private ArrayList<ServiceRegistryEntry> srEntries;
   private String srBaseUri;
 
+  /**
+   * Constructor to log the service registry base uri and to create the service registry entries
+   * that will be needed to register to the ServiceRegistry by reading the json serviceList in config/.
+   * @param srBaseUri
+   */
   public ServiceRegistrator(String srBaseUri){
     srEntries = new ArrayList<ServiceRegistryEntry>();
     this.srBaseUri = srBaseUri;
@@ -54,6 +62,9 @@ public class ServiceRegistrator {
     System.out.println("The number of services created was: " + srEntries.size());
   }
 
+  /**
+   * This function registers all services that was created from createServiceEntriesFromFile.
+   */
   public void registerAllServices(){
     // create the URI for the request
     String registerUri = UriBuilder.fromPath(srBaseUri).path("register").toString();
@@ -73,12 +84,19 @@ public class ServiceRegistrator {
     System.out.println("Registering services was a success!");
   }
 
+  /**
+   * This function will remove a single entry from the ServiceRegistry.
+   * @param srEntry
+   */
   public void unregisterFromServiceRegistry(ServiceRegistryEntry srEntry){
     String removeUri = UriBuilder.fromPath(srBaseUri).path("remove").toString();
     Utility.sendRequest(removeUri, "PUT", srEntry);
     System.out.println("Removing service is successful!");
   }
 
+  /**
+   * This function will remove all the entries made from registerAllServices from the ServiceRegistry.
+   */
   public void unregisterAllFromServiceRegistry(){
     String removeUri = UriBuilder.fromPath(srBaseUri).path("remove").toString();
     for (int i = 0; i < srEntries.size(); i++){
@@ -87,6 +105,11 @@ public class ServiceRegistrator {
     System.out.println("Removing all services was a success!");
   }
 
+  /**
+   * This function will return the system in srEntries arraylist that corresponds to the argument or null if it doesnt exist.
+   * @param systemName
+   * @return
+   */
   public ArrowheadSystem getSystem(String systemName){
     for(int i = 0; i < srEntries.size(); i++){
       if(srEntries.get(i).getProvider().getSystemName().equals(systemName)){
@@ -96,6 +119,11 @@ public class ServiceRegistrator {
     return null;
   }
 
+  /**
+   * This function will return the service in srEntries arraylist that corresponds to the argument or null if it doesnt exist.
+   * @param serviceName
+   * @return
+   */
   public ArrowheadService getService(String serviceName){
     for(int i = 0; i < srEntries.size(); i++){
       if(srEntries.get(i).getProvidedService().getServiceDefinition().equals(serviceName)){
@@ -105,8 +133,11 @@ public class ServiceRegistrator {
     return null;
   }
 
-
-
+  /**
+   * This function will return the srEntries arraylist containing all the service registry entries read in from
+   * createServiceEntriesFromFile.
+   * @return
+   */
   public ArrayList<ServiceRegistryEntry> getSrEntries(){
     return srEntries;
   }

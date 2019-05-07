@@ -39,12 +39,14 @@ public class CanBusProviderMain extends ArrowheadClientMain {
     new CanBusProviderMain(args);
   }
 
+  /**
+   * CanBusProviderMain will be starting the server and register all necessary infromation (ServiceRegistry and AuthRegistry).
+   * @param args
+   */
   private CanBusProviderMain(String[] args) {
-
     Set<Class<?>> classes = new HashSet<>(Arrays.asList(CanApiResource.class));
     String[] packages = {"eu.arrowhead.client.common"};
     init(ClientType.PROVIDER, args, classes, packages);
-
     for (String arg : args) {
       switch (arg) {
         case "-ff":
@@ -58,16 +60,13 @@ public class CanBusProviderMain extends ArrowheadClientMain {
           break;
       }
     }
-
     if (isSecure && NEED_ORCH) {
       throw new ServiceConfigurationError("The Store registration feature can only be used in insecure mode!");
     }
-
     setupBaseUris();
     sr = new ServiceRegistrator(SR_BASE_URI);
     sr.createServiceEntriesFromFile(SERVICE_ENTRY_FILE);
     sr.registerAllServices();
-
     if (NEED_AUTH) {
       AuthorisationRegistrator ar = new AuthorisationRegistrator(AUTH_URI);
       ar.createAuthorisationEntriesFromFile(AUTH_ENTRY_FILE, sr);
@@ -76,10 +75,12 @@ public class CanBusProviderMain extends ArrowheadClientMain {
     if (NEED_ORCH) {
       registerToStore();
     }*/
-
     listenForInput();
   }
 
+  /**
+   * This function prepares the URI's that will be needed and also reads in the service entry file and auth entry file.
+   */
   private void setupBaseUris(){
     TypeSafeProperties props = Utility.getProp();
     //Service registry address (srAuth)
@@ -96,7 +97,9 @@ public class CanBusProviderMain extends ArrowheadClientMain {
     AUTH_ENTRY_FILE = props.getProperty("auth_entry", "config/consumerList.json");
   }
 
-  /* TODO: Fix so it unregisters all services */
+  /**
+   * This function will close the server and unregister all services from the ServiceRegistry in Arrowhead.
+   */
   @Override
   protected void shutdown() {
     if (server != null) {

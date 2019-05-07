@@ -15,12 +15,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+/**
+ * CanApiResource is the Api resource which will handle the paths and handle the responses.
+ */
 @Path("controller")
 public class CanApiResource {
 
   private FormulaCollection formula;
   private CanBusApp canBus;
 
+  /**
+   * Construct that makes the formula class which will be used for calculating the response from the CAN bus and makes the
+   * Can bus application to read from the can bus.
+   */
   public CanApiResource(){
     try {
       formula = new FormulaCollection();
@@ -30,6 +37,13 @@ public class CanApiResource {
     }
   }
 
+  /**
+   * Function that repsonse to the url: address:port/controller/rpm, will return the engines RPM.
+   * @param context
+   * @param token
+   * @param signature
+   * @return
+   */
   @GET
   @Path("enginerpm")
   @Produces(MediaType.APPLICATION_JSON)
@@ -54,6 +68,13 @@ public class CanApiResource {
 
   }
 
+  /**
+   * Function that response to the url: address:port/controller/enginecoolanttemp, will return the temperature of the engines coolant.
+   * @param context
+   * @param token
+   * @param signature
+   * @return
+   */
   @GET
   @Path("enginecoolanttemp")
   @Produces(MediaType.APPLICATION_JSON)

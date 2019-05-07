@@ -20,14 +20,19 @@ class RequestVerification {
     was created by the Authorization Core System with the provider public key. It also checks if the token expired or not, plus the token
     has to contain the same consumer name as the common name field of the client certificate.
    */
+
+  /**
+   * Function to handle security tokens and signatures for safety.
+   * @param context
+   * @param token
+   * @param signature
+   */
   static void verifyRequester(SecurityContext context, String token, String signature) {
     try {
       String commonName = SecurityUtils.getCertCNFromSubject(context.getUserPrincipal().getName());
       String[] commonNameParts = commonName.split("\\.");
       String consumerName = commonNameParts[0];
 
-      /*System.out.println(token);
-      System.out.println(signature);*/
       if (token.contains(" ")) {
         token = token.replaceAll("\\s", "+");
       }

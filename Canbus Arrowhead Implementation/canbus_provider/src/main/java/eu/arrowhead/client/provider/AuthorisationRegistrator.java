@@ -11,7 +11,7 @@ import eu.arrowhead.client.common.model.IntraCloudAuthEntry;
 import java.util.ArrayList;
 
 /**
- *
+ * AuthorisationRegistrator class handles the registration of services to the Authorisation in arrowhead.
  */
 public class AuthorisationRegistrator {
 
@@ -19,7 +19,7 @@ public class AuthorisationRegistrator {
   private String authUri;
 
   /**
-   *
+   * Construct to log the authUri and to create the authEntries arraylist for storing the authEntries.
    * @param authUri
    */
   public AuthorisationRegistrator(String authUri){
@@ -28,7 +28,8 @@ public class AuthorisationRegistrator {
   }
 
   /**
-   *
+   * This function will fill the authEntries arraylist with authEntry, by reading consumerList.json and putting together a authEntry.
+   * Making it possible to register all services in the Authorisation at once.
    * @param path
    * @param sr
    */
@@ -70,7 +71,7 @@ public class AuthorisationRegistrator {
   }
 
   /**
-   *
+   * This function will simply register all services that was made ready with createAuthorisationEntriesFromFile to the Authorisation module in Arrowhead.
    */
   public void registerAuthorisationEntries(){
     for (int i = 0; i < authEntries.size(); i++){

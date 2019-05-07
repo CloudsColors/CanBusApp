@@ -7,8 +7,16 @@ import com.google.gson.stream.JsonReader;
 
 import java.io.FileReader;
 
+/**
+ * Class to read in Json files.
+ */
 public class JsonFileParser {
 
+  /**
+   * Function to get an JsonArray from reading a file.
+   * @param fileName
+   * @return
+   */
   public static JsonArray readFileToJsonArray(String fileName){
     try{
       JsonReader reader = new com.google.gson.stream.JsonReader(new FileReader(fileName));
@@ -20,6 +28,11 @@ public class JsonFileParser {
     return null;
   }
 
+  /**
+   * Function to get a JsonObject from reading a file.
+   * @param fileName
+   * @return
+   */
   public static JsonObject readFileToJsonObject(String fileName){
     try{
       JsonReader reader = new JsonReader(new FileReader(fileName));
