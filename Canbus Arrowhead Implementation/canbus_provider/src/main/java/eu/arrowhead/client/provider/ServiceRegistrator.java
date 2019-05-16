@@ -30,6 +30,10 @@ public class ServiceRegistrator {
     this.srBaseUri = srBaseUri;
   }
 
+  /**
+   * Functions to create the service regestries that will later be used to register the services. These are kept in srEntries for future use in AuthRegistrator.
+   * @param filename
+   */
   public void createServiceEntriesFromFile(String filename){
     JsonArray services = JsonFileParser.readFileToJsonArray(filename);
     for(int i = 0; i < services.size(); i++){

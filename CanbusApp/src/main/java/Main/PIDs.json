@@ -1,0 +1,16 @@
+[
+  {
+    "description": "Engine rpm",
+    "var-name": "enginerpm",
+    "pid-code": "0x0C",
+    "formula": "(256*A+B)/4",
+    "type": "integer"
+  },
+  {
+    "description": "Engine coolant temperature",
+    "var-name": "enginecooltemp",
+    "pid-code": "0x05",
+    "formula": "A-40",
+    "type": "integer"
+  }
+]

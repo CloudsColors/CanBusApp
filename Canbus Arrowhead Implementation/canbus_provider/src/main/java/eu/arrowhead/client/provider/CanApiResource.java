@@ -3,7 +3,7 @@ package eu.arrowhead.client.provider;
 import CanWrapper.Message;
 import Main.CanBusApp;
 import Main.FormulaCollection;
-import Main.ReadServiceJson;
+import Main.ReadPIDCodes;
 import eu.arrowhead.client.common.model.IOMessage;
 
 import javax.ws.rs.GET;
@@ -23,6 +23,7 @@ public class CanApiResource {
 
   private FormulaCollection formula;
   private CanBusApp canBus;
+  private ReadPIDCodes pids;
 
   /**
    * Construct that makes the formula class which will be used for calculating the response from the CAN bus and makes the
@@ -32,6 +33,7 @@ public class CanApiResource {
     try {
       formula = new FormulaCollection();
       canBus = new CanBusApp("73-30130-00441-2", "10043");
+      pids = new ReadPIDCodes();
     }catch(Exception e){
       System.out.println(e);
     }
@@ -54,7 +56,7 @@ public class CanApiResource {
     Message msg = null;
     int data = -1;
     try {
-      msg = canBus.getFromCan(ReadServiceJson.ENGINE_RPM);
+      msg = canBus.getFromCan(pids.getPIDCode("enginerpm"));
     }catch(Exception e){
       System.out.println("Failure");
     }
@@ -85,7 +87,7 @@ public class CanApiResource {
     Message msg = null;
     int data = -1;
     try {
-      msg = canBus.getFromCan(ReadServiceJson.ENGINE_COOL_TEMP);
+      msg = canBus.getFromCan(pids.getPIDCode("enginecooltemp"));
     }catch(Exception e){
       System.out.println("Failure");
     }
